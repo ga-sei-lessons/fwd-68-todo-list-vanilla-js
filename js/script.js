@@ -1,8 +1,9 @@
 /* APP STATE */
+
 let toDos = localStorage.getItem("toDos") 
 let completedToDos = localStorage.getItem("completedTodos") 
 
-// toDos are not null - parse them into js
+// if toDos are not null - parse them into js (stretch goal...)
 if(toDos) {
   toDos = JSON.parse(toDos)
 } else {
@@ -28,7 +29,8 @@ const completedToDoCount = document.querySelector("#completed-to-do-count")
 /* EVENT LISTENERS */
 
 form.addEventListener("submit", addToDo) 
-// one event listener to rule them all
+
+// one event listener to rule them all (this is stretch...)
 document.addEventListener("click", event => {
   if (event.target.matches(".to-do-item")) {
     const toDo = event.target.innerText 
@@ -47,7 +49,7 @@ function addToDo(event) {
   if (toDo) {
     // Add typed string to `toDos` array
     toDos.push(toDo) 
-    // store todo in local storate
+    // store todo in local storage (stretch...)
     window.localStorage.setItem("toDos", JSON.stringify(toDos)) 
     // Render all to-dos
     renderToDos() 
@@ -95,8 +97,6 @@ function renderToDo(toDo) {
   })
 }
 
-// 2. COMPLETE TO-DOS
-
 // When user clicks a to-do `li` element, this function is called
 function completeToDo(toDo) {
   // add completed to-do to completed array
@@ -106,9 +106,10 @@ function completeToDo(toDo) {
   // https://stackoverflow.com/questions/5767325/how-can-i-remove-a-specific-item-from-an-array
   toDos = toDos.filter(t => t !== toDo) 
 
-  // add completed todos to local storage
+  // add completed todos to local storage (stretch....)
   window.localStorage.setItem("toDos", JSON.stringify(toDos)) 
   window.localStorage.setItem("completedTodos", JSON.stringify(completedToDos)) 
+
   // Re-render to-dos and completed to-dos
   renderToDos() 
   renderCompletedToDos() 
@@ -129,12 +130,16 @@ function renderCompletedToDos() {
 }
 
 function renderCompleted(completed) {
+  // create list element
   const li = document.createElement("li") 
-  li.classList.add("done-item") 
+  // add css class
+  li.classList.add("done-item")
+  // add text to element 
   li.innerText = completed 
+  // append element to the DOM
   completedToDoList.appendChild(li) 
 }
 
-// render one time on page load incase something was in local storage
+// render one time on page load incase something was in local storage (stretch...)
 renderToDos()
 renderCompletedToDos()
