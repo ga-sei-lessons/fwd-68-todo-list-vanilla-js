@@ -4,8 +4,22 @@
 /* APP STATE */
 
 // Our array of to-dos - we will push a to-do to this array when a new to do is added, and then render the whole list of to-dos as `li` elements in our `ul#to-do-list` element
-const toDos = [];
-const completedToDos = [];
+let toDos = localStorage.getItem("toDos") 
+let completedToDos = localStorage.getItem("completedTodos") 
+
+// toDos are not null - parse them into js
+if(toDos) {
+  toDos = JSON.parse(toDos)
+} else {
+  // otherwise instantiate an empty array
+  toDos = []
+}
+
+if (completedToDos) {
+  completedToDos = JSON.parse(completedToDos)
+} else {
+  completedToDos = []
+}
 
 /* DOM ELEMENTS */
 
@@ -14,6 +28,7 @@ const toDoList = document.querySelector("#to-do-list");
 const form = document.querySelector("#to-do-form");
 const toDoInput = document.querySelector("#to-do-input");
 const toDoCount = document.querySelector("#to-do-count")
+const completedToDoCount = document.querySelector("#completed-to-do-count")
 
 /* EVENT LISTENERS */
 
@@ -30,6 +45,8 @@ function addToDo(event) {
   if (toDo) {
     // Add typed string to `toDos` array
     toDos.push(toDo);
+    // store todo in local storate
+    window.localStorage.setItem("toDos", JSON.stringify(toDos));
     // Render all to-dos
     renderToDos();
   }
@@ -42,7 +59,7 @@ function addToDo(event) {
 function renderToDos() {
   // Clear `ul` element of HTML before rendering - prevents double rendering of to-dos
   // toDoList.innerHTML = ""; // bad way of doing things
-  
+
   // do it like this 
   while(toDoList.firstChild) {
     toDoList.removeChild(toDoList.firstChild)
@@ -85,11 +102,11 @@ function completeToDo(toDo) {
   
   // Remove completed to-do from to-dos array
   // https://stackoverflow.com/questions/5767325/how-can-i-remove-a-specific-item-from-an-array
-  // toDos = toDos.filter(t => t !== toDo);
-  toDos = toDos.filter(function(t) {
-    return t !== toDos
-  })
-  
+  toDos = toDos.filter(t => t !== toDo);
+
+  // add completed todos to local storage
+  window.localStorage.setItem("toDos", JSON.stringify(toDos));
+  window.localStorage.setItem("completedTodos", JSON.stringify(completedToDos));
   // Re-render to-dos and completed to-dos
   renderToDos();
   renderCompletedToDos();
@@ -105,8 +122,8 @@ function renderCompletedToDos() {
   for (completedToDo of completedToDos) {
     renderCompleted(completedToDo);
   }
-  
-  document.querySelector("#completed-to-do-count").innerText = completedToDos.length;
+
+  completedToDoCount.innerText = completedToDos.length;
 }
 
 function renderCompleted(completed) {
@@ -115,3 +132,7 @@ function renderCompleted(completed) {
   li.innerText = completed;
   completedToDoList.appendChild(li);
 }
+
+// render one time on page load incase something was in local storage
+renderToDos()
+renderCompletedToDos()
