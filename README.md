@@ -20,8 +20,6 @@ https://codepen.io/GAmarketing/pen/mdROqWo
 
 stretch goals solve:
 
-
-
 ## Code Along
 
 ###### tags: `lessons`
